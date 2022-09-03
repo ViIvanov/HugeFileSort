@@ -13,7 +13,7 @@ if ((args?.Length ?? 0) == 0)
 var file = args![0];
 var chunkSize = args?.Length > 1 ? int.Parse(args[1]) : DefaultChunkSize;
 
-var comparer = new Comparer(StringComparison.CurrentCulture);
+var comparer = new Comparer(StringComparison.Ordinal);
 
 Encoding encoding;
 List<string> tempFiles;
