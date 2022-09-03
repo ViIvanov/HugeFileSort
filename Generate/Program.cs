@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+
 const string TextCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const int DefaultCount = 10_000_000;
 const int MinStringLength = 16;
@@ -15,8 +17,14 @@ var count = args.Length > 1 ? int.Parse(args[1]) : DefaultCount;
 var maxStringLength = args.Length > 2 ? int.Parse(args[2]) : MaxStringLength;
 var minStringLength = args.Length > 3 ? int.Parse(args[3]) : MinStringLength;
 
+var stopwatch = Stopwatch.StartNew();
+
 using (var f = File.CreateText(file))
     Generate(f, count, minStringLength, maxStringLength);
+
+stopwatch.Stop();
+Console.WriteLine($"Generated in {stopwatch.Elapsed} ({count:N0} lines to \"{file}\")");
+
 return 0;
 
 

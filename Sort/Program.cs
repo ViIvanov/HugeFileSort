@@ -15,6 +15,8 @@ var chunkSize = args?.Length > 1 ? int.Parse(args[1]) : DefaultChunkSize;
 
 var comparer = new Comparer(StringComparison.Ordinal);
 
+var stopwatch = Stopwatch.StartNew();
+
 Encoding encoding;
 List<string> tempFiles;
 using (var reader = new StreamReader(file, true))
@@ -34,18 +36,30 @@ using (var reader = new StreamReader(file, true))
 
 }
 
+stopwatch.Stop();
+Console.WriteLine($"Splitted in {stopwatch.Elapsed}");
+
+var stopwatchMerge = Stopwatch.StartNew();
+stopwatch.Start();
+
 try
 {
-        var files = tempFiles
+      var files = tempFiles
             .Select(f => File.OpenText(f))
             .ToList();
         File.WriteAllLines(file, files.Select(f => f.EnumerateLines()).MergeLines(comparer), encoding);
         files.ForEach(f => f.Dispose());
+        stopwatchMerge.Stop();
 }
 finally
 { 
     tempFiles.ForEach(f => File.Delete(f));
 }
+
+stopwatch.Stop();
+
+Console.WriteLine($"Merged in {stopwatchMerge.Elapsed}");
+Console.WriteLine($"Sorted in {stopwatch.Elapsed}");
 
 return 0;
 
