@@ -47,7 +47,8 @@ try
       var files = tempFiles
             .Select(f => File.OpenText(f))
             .ToList();
-        File.WriteAllLines(file, files.Select(f => f.EnumerateLines()).MergeLines(comparer), encoding);
+        var destination = Path.ChangeExtension(file, $".Sorted{Path.GetExtension(file)}");
+        File.WriteAllLines(destination, files.Select(f => f.EnumerateLines()).MergeLines(comparer), encoding);
         files.ForEach(f => f.Dispose());
         stopwatchMerge.Stop();
 }
